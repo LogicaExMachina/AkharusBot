@@ -10,16 +10,16 @@ client.on("message", (message) => {
 	if( (!message.content.startsWith(prefix)) || message.author.bot) {
 		return
 	} else	{
-		const parts = message.content.slice(1).split(" ");
-		const cmd = parts[0];
-		const args = parts.slice(1).join(" ");
+		const args = message.content.slice(prefix.length).split(/ +/);
+		const command = args.shift().toLowerCase();
+
 		console.log(`Parsing ${message}...`);
-		console.log(`Command: ${cmd}...`);
+		console.log(`Command: ${command}...`);
 		console.log(`args: ${args}...`);
-		if (cmd === "ping") {
+		if (command === "ping") {
 			message.channel.send("pong!");
 		}
-		else if (cmd === `roll`) {
+		else if (command === `roll`) {
 			size = parseInt(args);
 			console.log(`Size: ${size}...`);
 			if(!isNaN(size)) {
