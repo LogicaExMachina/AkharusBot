@@ -1,6 +1,15 @@
+const fs = require("fs");
 const Discord = require("discord.js");
 const {prefix, token}  = require("./config.json");
+
 const client = new Discord.Client();
+client.commands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.name, command);
+}
 
 client.on("ready", () => {
 	console.log("AkharusBot is ready...");
@@ -16,16 +25,17 @@ client.on("message", (message) => {
 		console.log(`Parsing ${message}...`);
 		console.log(`Command: ${command}...`);
 		console.log(`args: ${args}...`);
-		if (command === "ping") {
-			message.channel.send("pong!");
+
+		if( !client.commands.has(command)) {
+			return;
+		};
+
+		try {
+			client.commands.get(command).execute(message, args);
 		}
-		else if (command === `roll`) {
-			size = parseInt(args);
-			console.log(`Size: ${size}...`);
-			if(!isNaN(size)) {
-				result = Math.floor(Math.random()*size)+1;
-				message.channel.send(result);
-			}
+		catch (error) {
+			console.error(error);
+			message.reply('there was an error trying to execute that command!');
 		}
 	}
 });
