@@ -7,7 +7,7 @@ client.on("ready", () => {
 });
 
 client.on("message", (message) => {
-	if( !(message.content.startsWith(prefix) || message.author.bot)) {
+	if( (!message.content.startsWith(prefix)) || message.author.bot) {
 		return
 	} else	{
 		const parts = message.content.slice(1).split(" ");
