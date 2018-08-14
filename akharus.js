@@ -16,8 +16,16 @@ client.on("message", (message) => {
 		console.log(`Parsing ${message}...`);
 		console.log(`Command: ${cmd}...`);
 		console.log(`args: ${args}...`);
-		if (message.content === `${prefix}ping`) {
+		if (cmd === "ping") {
 			message.channel.send("pong!");
+		}
+		else if (cmd === `roll`) {
+			size = parseInt(args);
+			console.log(`Size: ${size}...`);
+			if(!isNaN(size)) {
+				result = Math.floor(Math.random()*size)+1;
+				message.channel.send(result);
+			}
 		}
 	}
 });
